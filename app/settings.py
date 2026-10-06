@@ -3,8 +3,8 @@ import os
 from dataclasses import dataclass
 
 #: Browser front ends allowed to call this API.
-DEFAULT_CORS_ORIGINS = ["https://app.example.com", "https://admin.example.com"]
-DEFAULT_CORS_METHODS = ["GET", "POST", "PATCH"]
+DEFAULT_CORS_ORIGINS = ["*"]
+DEFAULT_CORS_METHODS = ["GET", "POST", "PATCH", "DELETE"]
 
 
 def _split(value: str) -> list[str]:
