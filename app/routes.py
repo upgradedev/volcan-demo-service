@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 from app.permissions import (
     can_create_workspace,
+    can_delete_workspace,
     can_edit_workspace,
     can_view_workspace,
     current_user,
@@ -68,3 +69,11 @@ def rename_workspace(
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Not allowed to edit this workspace")
     workspace.name = body.name
     return WorkspaceOut.of(workspace)
+
+
+@router.delete("/{workspace_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_workspace(workspace_id: int, user: CurrentUser, store: StoreDep) -> None:
+    workspace = _load(workspace_id, store)
+    if not can_delete_workspace(user, workspace):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Not allowed to delete this workspace")
+    store.delete_workspace(workspace.id)

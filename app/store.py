@@ -57,6 +57,9 @@ class Store:
     def workspaces_for(self, user: User) -> list[Workspace]:
         return [w for w in self._workspaces.values() if user.id in w.member_ids]
 
+    def delete_workspace(self, workspace_id: int) -> None:
+        self._workspaces.pop(workspace_id, None)
+
 
 def seeded_store() -> Store:
     store = Store()

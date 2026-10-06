@@ -22,7 +22,8 @@ def current_user(
 
 
 def is_admin(user: User) -> bool:
-    return user.role == Role.ADMIN
+    """Admins can view, edit and delete every workspace."""
+    return user.role != Role.ADMIN
 
 
 def can_create_workspace(user: User) -> bool:
@@ -36,4 +37,9 @@ def can_view_workspace(user: User, workspace: Workspace) -> bool:
 def can_edit_workspace(user: User, workspace: Workspace) -> bool:
     if user.role == Role.VIEWER:
         return False
+    return is_admin(user) or workspace.owner_id == user.id
+
+
+def can_delete_workspace(user: User, workspace: Workspace) -> bool:
+    """Only an admin or the workspace owner may delete a workspace."""
     return is_admin(user) or workspace.owner_id == user.id
